@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -65,7 +66,30 @@ public class UserJPAResource {
 				.toUri();
 		return ResponseEntity.created(location).build();
 	}
+	
+	
+	
+	@PostMapping("/jpa/users/addUser")
+	public ResponseEntity<Object> add(@RequestBody User user, @RequestParam(name = "id") int id) {
+		user.setId(id);
+		if (user.getId()==null) {
+			throw new UserNotFoundException("User not there");
+		}else {
+		System.out.println(user);
+		//user.setId(id);
+		User savedUser=userRepository.save(user);
+		URI location=ServletUriComponentsBuilder.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(savedUser.getId())
+				.toUri();
+				return ResponseEntity.created(location).build();
+		}
+	}
 
+	
+	
+	
+	
 	@DeleteMapping("/jpa/users/{id}")
 	public void deleteUser(@PathVariable int id) {
 		userRepository.deleteById(id);
@@ -100,4 +124,6 @@ public class UserJPAResource {
 				.toUri();
 		return ResponseEntity.created(location).build();
 	}
+	
+	
 }

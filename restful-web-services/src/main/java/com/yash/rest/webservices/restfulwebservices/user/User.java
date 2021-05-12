@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiModelProperty;
 @Entity
 public class User {
 	@Id
-	@GeneratedValue
+	//@GeneratedValue
 	private Integer id;
 	
 	@ApiModelProperty(notes = "Name should have atleast 2 characters")
